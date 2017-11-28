@@ -1,18 +1,19 @@
 <?php
 /*
 Plugin Name: Scoutnet API
-Plugin URI: https://www.scouterna.se
+Plugin URI: http://etjanster.scout.se
 Description: Ett plugin till Scouterna
-Version: 1.0
+Version: 1.1
 Author: Emil Öhman, Joel Martinsson, Sven Jungmar, Magnus Hasselquist
-Author URI: http://etjanster.scout.se
+Author URI: http://scouterna.se
 */
 
 function get_scoutnet_api_url()	{
 	
-	return $scoutnet_api_url = "s1.test.custard.no";
+	return $scoutnet_api_url = "www.scoutnet.se";
 		
 }
+
 
 /*
 Class for optionpage for Scoutnet API
@@ -125,9 +126,8 @@ class ScoutnetApiSettingsPage	{
         );
 		
 		/*
-		Section register member
-		*/
-		
+		Section register member fields
+		*/		
 		add_settings_section(
             'setting_section_register_member_id', // ID
             'Inställning för intresseanmälningsformulär', // Title
@@ -182,7 +182,9 @@ class ScoutnetApiSettingsPage	{
             'scoutnet-api-admin', 
             'setting_section_register_member_id'
         );
-		
+		/*
+		End section register member fields
+		*/
 		
     }
 
@@ -218,8 +220,7 @@ class ScoutnetApiSettingsPage	{
 		Register member section
 		*/
 		if( isset( $input['register_member_success_message'] ) )	{
-            //$new_input['register_member_success_message'] = sanitize_text_field( $input['register_member_success_message'] );
-			$new_input['register_member_success_message'] = $input['register_member_success_message'];
+            $new_input['register_member_success_message'] = $input['register_member_success_message'];
 		}
 		
 		if( isset( $input['register_member_from_email'] ) )	{
@@ -240,9 +241,7 @@ class ScoutnetApiSettingsPage	{
 		
 		if( isset( $input['register_member_medlemsreg_avdelning_standard'] ) )	{
             $new_input['register_member_medlemsreg_avdelning_standard'] = $input['register_member_medlemsreg_avdelning_standard'];
-		}
-		
-		
+		}	
 		
         return $new_input;
     }
@@ -264,7 +263,7 @@ class ScoutnetApiSettingsPage	{
 		<br/>Brädgårdstecknen blir gröna när anslutningen fungerar.';
     }
 	
-	 /** 
+	/** 
      * Print the Section text
      */
     public function print_section_register_member_info()	{
@@ -307,7 +306,7 @@ class ScoutnetApiSettingsPage	{
 		echo "<span style=\"color: $color\">#</span>";
     }
 	
-	 /** 
+	/** 
      * Get the settings option array and print one of its values
      */
     public function api_nyckel_vantelista_callback()	{
@@ -367,12 +366,7 @@ class ScoutnetApiSettingsPage	{
      * Get the settings option array and print one of its values
      */
     public function register_member_success_message_callback()	{
-       /* printf(
-            '<input type="text" size="50" id="register_member_success_message" name="scoutnet_option_name[register_member_success_message]" value="%s" />',
-            isset( $this->options['register_member_success_message'] ) ? esc_attr( $this->options['register_member_success_message']) : ''
-        );
-		*/
-		printf(
+       	printf(
             '<textarea rows="5" cols="50" id="register_member_success_message" name="scoutnet_option_name[register_member_success_message]">%s</textarea>',
             isset( $this->options['register_member_success_message'] ) ? esc_attr( $this->options['register_member_success_message']) : '<p><b>Tack för din anmälan av en ny eventuell scout.</b> Om du har frågor om din anmälan, kontakta XXXX på YYY@ZZZ.scout.se eller ring 070-12 34 45.</p>
 
@@ -489,9 +483,9 @@ class ScoutnetApiSettingsPage	{
 	
 }
 
-//if( is_admin() )	{
-    $scoutnet_api_settings_page = new ScoutnetApiSettingsPage();
-//}
+
+$scoutnet_api_settings_page = new ScoutnetApiSettingsPage();
+
 	
 
 
@@ -501,8 +495,8 @@ function scoutnet_post_type_function()	{
 	$labels = array(
 		'name'                  => 'Scoutnetkopplingar',
 		'singular_name'         => 'Scoutnetkoppling',
-		'menu_name'             => 'Scoutnet synk',
-		'name_admin_bar'        => 'Scoutnet synk',
+		'menu_name'             => 'Scoutnet koppling',
+		'name_admin_bar'        => 'Scoutnet koppling',
 		'archives'              => 'Kopplingsarkiv',
 		'parent_item_colon'     => 'Överordnad koppling:',
 		'all_items'             => 'Alla kopplingar',
@@ -536,7 +530,7 @@ function scoutnet_post_type_function()	{
 		'show_ui'               => true,
 		'show_in_menu'          => true,
 		'menu_position'         => 5,
-		'menu_icon'             => 'f106',
+		'menu_icon'             => 'dashicons-randomize',
 		'show_in_admin_bar'     => true,
 		'show_in_nav_menus'     => true,
 		'can_export'            => true,
@@ -581,6 +575,7 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 				'form_vantelista' => false,
 				'ledare' => false,
 				'styrelsen' => false,
+				'statistik' => false,
 			), $atts, 'zkaout_shortcode' );
 		  
 			$list_id;
@@ -675,6 +670,11 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 			elseif ($a['styrelsen'])	{
 				
 				return scoutnet_styrelsen();
+			}
+			
+			elseif ($a['statistik'])	{
+				
+				return scoutnet_statistik();
 			}
 			
 			else	{
@@ -818,7 +818,62 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 		return $list_id;
 	}
 	
+/***************Start statistik**************/	
+	function scoutnet_statistik()	{
+				
+		echo "<kille>This is a heading</kille>";
+		
+		$karid = scoutnet_get_option_kar_id();
+		$apinyckel = scoutnet_get_option_api_nyckel_kar_full();
+		$apiurl = get_scoutnet_api_url();
+		
+		$variable = file_get_contents("https://$karid:$apinyckel@$apiurl/api/group/memberlist");
+		$decoded = json_decode($variable, true);
+		$members = $decoded['data'];
+		
+		$the_return_string = "";
+		
+		$dagens_datum = date("m-d");
+		
+		
+		foreach ($members as $i => $medlem) {
+			
+			$fodelse_datum = $medlem['date_of_birth']['value'];
+			
+			$fodelse_datum_array = explode('-', $fodelse_datum);
+				
+			$fodelse_manad = $fodelse_datum_array[1];
+			$fodelse_dag = $fodelse_datum_array[2];
+				
+			$fodelse_datum = $fodelse_manad . '-' . $fodelse_dag;			
+			
+			if ($dagens_datum==$fodelse_datum)	{	//En person fyller år i dag
+			
+				$the_return_string .= $medlem['first_name']['value'];
+				$the_return_string .= ' (' . $medlem['unit']['value'] . ')';
+				$the_return_string .= "<br>";
+			}						
+		}	
+		
+		return $the_return_string;		
+	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+/***********END statistik*********************/	
+	/*
+	 * Få en lista över vilka medlemmar som fyller år i dag
+	 */	
 	function scoutnet_fodelsedag()	{
 		
 		$karid = scoutnet_get_option_kar_id();
@@ -855,8 +910,14 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 		
 		return $the_return_string;		
 	}
+	
+	
+	/*
+	 * Få en förformatterad lista över vilka som är i styrelen med kårordförande först
+	 * Om man har flera roller i styrelsen står man med flera gånger.
+	 */	
 	//TODO ta bort kodupprepningen med funktionsanrop i stället.
-	//TODO gör klart
+	//TODO spara undan vilka personer som är tagna om t.ex kassör också är ledamot mm
 	function scoutnet_styrelsen()	{
 		
 		$karid = scoutnet_get_option_kar_id();
@@ -974,7 +1035,8 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 					
 					
 				}
-				
+			
+			
 			/*	if ($roll == 'Kårordförande')	{
 					
 					$ko .= $medlem['first_name']['value'] . ' ';
@@ -1019,6 +1081,11 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 		
 	}
 	
+	/*
+	 * Få en förformatterad text med enligt parameter
+	 * Alt1: Antal medlemmar
+	 * Alt2: Antal i väntelista
+	 */
 	function scoutnet_antal_kar($arg)	{
 		
 		$titel;
@@ -1046,6 +1113,9 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 		
 	}
 	
+	/*
+	 * Visar en del statistik över scouter över olika åldrar kön mm
+	 */
 	function scoutnet_alder_scouter()	{
 		
 		$karid = scoutnet_get_option_kar_id();
@@ -1101,11 +1171,17 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 		return $the_return_string;
 	}
 	
-	
+	/*
+	 * Get kårens/group namn
+	 */
 	function scoutnet_get_kar_namn()	{
 		$decoded = scoutnet_get_group_info();
 		return $decoded['Group']['name'];
 	}
+	
+	/*
+	 * Get some group info
+	 */
 	function scoutnet_get_group_info()	{
 		// lite statistik och info /api/organisation/group		
 		
@@ -1118,8 +1194,12 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 		
 		if($result !== FALSE)	{
 			return json_decode($result, true);
-		}
+		}		
 	}
+	
+	/*
+	 * Check if options to be able to use functions based on the detailed memberlist
+	 */
 	function scoutnet_get_member_list() {
 		// detaljerad medlemslista /api/group/memberlist
 				
@@ -1133,6 +1213,10 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 			return json_decode($result, true);
 		}
 	}
+	
+	/*
+	 * Check if options to be able to use custom mailinglists shortcodes are ok
+	 */
 	function scoutnet_get_custom_list() {
 		// E-postlista /api/group/customlists		
 		
@@ -1146,6 +1230,15 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 			return json_decode($result, true);
 		}
 	}
+	
+	
+	
+	
+	
+	
+	/*
+	 * Check if options to be able to use the waitinglistform is ok
+	 */	
 	function scoutnet_register_member()	{
 		// Väntelista /api/organisation/register/member
 		
@@ -1155,14 +1248,15 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 		
 		$result = @file_get_contents("https://$karid:$apinyckel@$apiurl/api/organisation/register/member");
 		
-		if($result !== FALSE)	{
-			return json_decode($result, true);
+		preg_match( "#HTTP/[0-9\.]+\s+([0-9]+)#",$http_response_header[0], $out );
+		if($out[1] == 400)	{		
+			return true;			
 		}	
 	}
 	
 	/*
 	Function for a waitinglistform
-	@Param $arg is true if the form is intended for leaders to registrate already existing members
+	@Param $arg is true if the form is intended for leaders to register already existing members
 	*/
 	function scoutnet_vantelista($arg)	{
 		
