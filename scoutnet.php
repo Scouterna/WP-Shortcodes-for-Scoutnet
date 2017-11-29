@@ -572,7 +572,10 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 				'alder_scouter' => false,
 				'inloggad' => false,
 				'fodelsedag' => false,
-				'form_vantelista' => false,
+				'intresseform' => false,
+				'width' => false,
+				'height' => false,
+				'intresseform_alt' => false,
 				'ledare' => false,
 				'styrelsen' => false,
 				'statistik' => false,
@@ -651,9 +654,14 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 				return scoutnet_antal_kar('antal_vantelista');				
 			}
 			
-			elseif ($a['form_vantelista'])	{
+			elseif ($a['intresseform'])	{
 				
-				return scoutnet_vantelista($a['ledare']);				
+				return scoutnet_vanteform($a['width'], $a['height']);				
+			}
+			
+			elseif ($a['intresseform_alt'])	{
+				
+				return scoutnet_vanteform_alt($a['ledare']);				
 			}
 			
 			elseif  ($a['alder_scouter'])	{
@@ -911,6 +919,30 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 		return $the_return_string;		
 	}
 	
+	/*
+	 * Embed an iframe from Scoutnet with the waitinglistform
+	 * Possible to define dimensions of the iframe
+	 */
+	function scoutnet_vanteform($width, $height)	{
+				
+		$karid = scoutnet_get_option_kar_id();
+		$apiurl = get_scoutnet_api_url();
+		
+		if (!$width)	{
+			$width = 450;			
+		}
+		if (!$height)	{
+			$height = 1600;			
+		}
+		
+		$adress = "https://$apiurl/register/in/group/$karid/styles/active";
+		
+		$iframe = '<iframe src= "'. $adress . '" width="'. $width .'" height="'. $height .'"></iframe>';
+								   
+		$the_return_string = $iframe;	
+				
+		return $the_return_string;
+	}
 	
 	/*
 	 * Få en förformatterad lista över vilka som är i styrelen med kårordförande först
@@ -1258,7 +1290,7 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 	Function for a waitinglistform
 	@Param $arg is true if the form is intended for leaders to register already existing members
 	*/
-	function scoutnet_vantelista($arg)	{
+	function scoutnet_vanteform_alt($arg)	{
 		
 		$ledare = false;
 		$the_return_string = "";
