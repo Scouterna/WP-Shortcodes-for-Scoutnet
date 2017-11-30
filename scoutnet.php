@@ -573,8 +573,8 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 				'inloggad' => false,
 				'fodelsedag' => false,
 				'intresseform' => false,
-				'width' => false,
-				'height' => false,
+				'bredd' => false,
+				'hojd' => false,
 				'intresseform_alt' => false,
 				'ledare' => false,
 				'styrelsen' => false,
@@ -656,7 +656,7 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 			
 			elseif ($a['intresseform'])	{
 				
-				return scoutnet_vanteform($a['width'], $a['height']);				
+				return scoutnet_vanteform($a['bredd'], $a['hojd']);				
 			}
 			
 			elseif ($a['intresseform_alt'])	{
@@ -923,21 +923,21 @@ add_action( 'init', 'scoutnet_post_type_function', 0 );
 	 * Embed an iframe from Scoutnet with the waitinglistform
 	 * Possible to define dimensions of the iframe
 	 */
-	function scoutnet_vanteform($width, $height)	{
+	function scoutnet_vanteform($bredd, $hojd)	{
 				
 		$karid = scoutnet_get_option_kar_id();
 		$apiurl = get_scoutnet_api_url();
 		
-		if (!$width)	{
-			$width = 450;			
+		if (!$bredd)	{
+			$bredd = 450;			
 		}
-		if (!$height)	{
-			$height = 1600;			
+		if (!$hojd)	{
+			$hojd = 1600;			
 		}
 		
 		$adress = "https://$apiurl/register/in/group/$karid/styles/active";
 		
-		$iframe = '<iframe src= "'. $adress . '" width="'. $width .'" height="'. $height .'"></iframe>';
+		$iframe = '<iframe src= "'. $adress . '" width="'. $bredd .'" height="'. $hojd .'"></iframe>';
 								   
 		$the_return_string = $iframe;	
 				
