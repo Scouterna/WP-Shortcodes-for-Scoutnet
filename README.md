@@ -1,6 +1,6 @@
 # wordpress-scoutnet
 ## Beroenden
-* phpmailer för intresseformulär
+* phpmailer för intresseformulär via API
 * Wordpress-tillägg "Advanced Custom Fields" för egna kortkoder
 * Wordpress-tillägg "Wordpress-importör" för att importera inställningar (egna fält).
 ## Installationsanvisning
