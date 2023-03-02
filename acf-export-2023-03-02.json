@@ -1,0 +1,66 @@
+[
+    {
+        "key": "group_6400c30ed7962",
+        "title": "Kopplingsinfo",
+        "fields": [
+            {
+                "key": "field_6400c310359d3",
+                "label": "List id",
+                "name": "list_id",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "Ange det list_id-nummer som finns för listan i Scoutnet",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            },
+            {
+                "key": "field_6400c3c9359d4",
+                "label": "Alias",
+                "name": "scoutnet_alias",
+                "aria-label": "",
+                "type": "text",
+                "instructions": "",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": ""
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "scoutnet_post_type"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "seamless",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]
